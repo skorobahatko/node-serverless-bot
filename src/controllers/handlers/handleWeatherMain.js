@@ -56,6 +56,7 @@ const handleWeatherMain = async (settings) => {
                         chat_id: chatId,
                         text: `${cityData.name}:\n${cityData.main}\n${cityData.temp.temp}`
                     }
+                    await createRequest(chatId, {request_city: text, request_response: JSON.stringify(cityData)}, db);
                 } else {
                     options = {
                         chat_id: chatId,
@@ -63,7 +64,6 @@ const handleWeatherMain = async (settings) => {
                     }
                 }
                 await sendMessage(options);
-                await createRequest(chatId, {request_city: text, request_response: JSON.stringify(cityData)}, db);
                 return {statusCode: 200};
             } else {
                 options = {

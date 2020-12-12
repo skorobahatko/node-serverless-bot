@@ -5,10 +5,7 @@ async function findUser (telegramId, db) {
     let user;
     try {
         const {User} = db; 
-        console.log(User);
-        console.log(await User.findOne({where: {telegramId}}));
         user = await User.findOne({where: {telegramId}});
-        console.log(user);
     } catch (e) {
         console.log(`Error ${e}`);
     }
@@ -50,6 +47,17 @@ async function createRequest (telegramId, body, db) {
     return request;
 }
 
+async function getAllRequests (telegramId, db) {
+    let results;
+    try {
+        const {Request} = db;
+        results = await Request.findAll({where: {telegramId}})
+    } catch (e) {
+        console.log(e)
+    }
+    return results;
+}
+
 async function sendMessage (options) {
     try {
         await axios.post(`https://api.telegram.org/bot${chatBotToken}/sendMessage`, options);
@@ -63,5 +71,6 @@ module.exports = {
     createUser,
     updateUser,
     sendMessage,
-    createRequest
+    createRequest,
+    getAllRequests
 };

@@ -26,9 +26,8 @@ const decoder = (code) => {
 const weatherCodeParser = async (data) => {
     try {
         let {weather, main: {temp, feels_like}, wind, clouds, name} = data;
-        let code = weather[0].id;
-        let description = decoder(code);
-
+        let description = weather[0].main;
+        console.log(weather[0].main)
         let result = {
             name,
             main: description,

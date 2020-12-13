@@ -1,4 +1,4 @@
-const {actionCity, sendMessage, updateUser} = require("../../services");
+const {actionCity, sendMessage, updateUser, endPoint, weatherCodeParser} = require("../../services");
 const {database} = require('../../database/models');
 
 const handleWeatherCurrent = async (settings) => {
@@ -9,9 +9,25 @@ const handleWeatherCurrent = async (settings) => {
         if (cb) {
             const city = await actionCity({type: 'oneCity', data: cb});
             if (city) {
-                options = {
-                    chat_id: chatId,
-                    text: `${city[0]}: weather bad \nor good\ndoesn\'t matter`
+                let result = '';
+                result = await endPoint(city[0]);
+                if (result) {
+                    result = await weatherCodeParser(result);
+                    options = {
+                        chat_id: chatId,
+                        text: `${result.name}:\n${result.main}\n${result.temp.temp}`
+                    }
+                } else {
+                    options = {
+                        chat_id: chatId,
+                        text: `I\'m sorry, u can try write name of city, or press on button to choose a region`,
+                        reply_markup: {
+                            keyboard: [[{text: 'Choose region'}], [{text: 'Back to main menu'}]],
+                            one_time_keyboard: true,
+                            resize_keyboard: true
+                        }
+                    }
+                    await updateUser(chatId, {stage: 'weatherMain'}, db);
                 }
                 await sendMessage(options);
                 options = {

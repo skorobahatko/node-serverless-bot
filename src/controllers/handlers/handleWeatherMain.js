@@ -48,7 +48,7 @@ const handleWeatherMain = async (settings) => {
             await updateUser(chatId, {stage: 'mainMenu'}, db);
             return {statusCode: 200};
         } else if (text) {
-            if (text.match("^[А-Яа-яЁёЇїІіЄєҐґa-zA-Z\-]+$")) {
+            if (text.match("^[А-Яа-яЁёЇїІіЄєҐґa-zA-Z\-]"," ")) {
                 let cityData = await endPoint(text);
                 if (cityData && !cityData.error) {
                     cityData = await weatherCodeParser(cityData);

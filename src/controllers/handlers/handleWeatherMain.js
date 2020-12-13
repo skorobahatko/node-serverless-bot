@@ -14,7 +14,7 @@ const handleWeatherMain = async (settings) => {
         const {chatId, from, text, cb} = settings;
         let options;
         
-        if ([`Обрати область`].includes(text)) {
+        if ([`Choose region`].includes(text)) {
             const regions = await actionCity({type: 'regions', data: {}});
             let inlineButtons = regions.map(el => {
                 return [{
@@ -28,24 +28,24 @@ const handleWeatherMain = async (settings) => {
             console.log(reply_markup);
             options = {
                 chat_id: chatId,
-                text: `Оберіть область`,
+                text: `Choose region`,
                 reply_markup: reply_markup
             }
-            await sendMessage(options);     
+            console.log(await sendMessage(options));
             await updateUser(chatId, {stage: 'weatherRegion'}, db);
             return {statusCode: 200};
-        } else if ([`До головного меню`].includes(text)) {
+        } else if ([`Back to main menu`].includes(text)) {
             options = {
                 chat_id: chatId,
-                text: `Оберіть бажаний пункт меню:`,
+                text: `Choose what u need:`,
                 reply_markup: {
-                    keyboard: [[{text: 'Дізнатися погоду'}],[{text: 'Історія пошуків'}],[{text: 'Карта'},{text: 'Деталі'}]],
+                    keyboard: [[{text: 'Weather now'}],[{text: 'History of searches'}],[{text: 'Map'},{text: 'Details'}]],
                     one_time_keyboard: true,
                     resize_keyboard: true
                 }
             }
+            console.log(await sendMessage(options));
             await updateUser(chatId, {stage: 'mainMenu'}, db);
-            await sendMessage(options);
             return {statusCode: 200};
         } else if (text) {
             if (text.match("^[А-Яа-яЁёЇїІіЄєҐґa-zA-Z\-]+$")) {
@@ -60,17 +60,17 @@ const handleWeatherMain = async (settings) => {
                 } else {
                     options = {
                         chat_id: chatId,
-                        text: 'Місто не знайдено, спробуйте ще раз,\nабо оберіть область'
+                        text: 'I can\'t find your city, try again,\nor choose a region'
                     }
                 }
-                await sendMessage(options);
+                console.log(await sendMessage(options));
                 return {statusCode: 200};
             } else {
                 options = {
                     chat_id: chatId,
-                    text: `Місто введено некоректно,\nспробуйте ще раз`
+                    text: `City wrote uncorrectly,\ntry again, or choose a region`
                 }
-                await sendMessage(options);     
+                console.log(await sendMessage(options));
                 // await updateUser(chatId, {stage: 'weatherRegion'}, db);
                 return {statusCode: 200};
             }

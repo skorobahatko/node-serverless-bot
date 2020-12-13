@@ -6,19 +6,19 @@ const handleWeatherRegion = async (settings) => {
         const db = database();
         const {cb, chatId, from, text} = settings;
         let cityesOfRegion = [], options;
-        if (cb && [`Оберіть область`].includes(text)) {
+        if (cb && [`Choose region`].includes(text)) {
             cityesOfRegion = await actionCity({type: 'cityes', data: cb});
             const region = await actionCity({type: 'oneRegion', data: cb});
             options = {
                 chat_id: chatId,
                 text: region[0],
                 reply_markup: {
-                    keyboard: [[{text: 'Потрібного міста немає'}],[{text: 'До головного меню'}]],
+                    keyboard: [[{text: 'No correct city'}],[{text: 'Back to main menu'}]],
                     one_time_keyboard: true,
                     resize_keyboard: true
                 }
             }
-            await sendMessage(options);
+            console.log(await sendMessage(options));
             let inlineButtons = cityesOfRegion.map(el => {
                 return [{
                     text: el,
@@ -30,10 +30,10 @@ const handleWeatherRegion = async (settings) => {
             });
             options = {
                 chat_id: chatId,
-                text: `Оберіть місто зі списку:`,
+                text: `Choose city from list:`,
                 reply_markup: reply_markup
             }
-            await sendMessage(options);
+            console.log(await sendMessage(options));
             await updateUser(chatId, {stage: 'weatherCity'}, db);
             return {statusCode: 200};
         } else {

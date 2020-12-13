@@ -8,20 +8,20 @@ const handleMainMenu = async (settings) => {
         const db = database();
         const {chatId, from, text} = settings;
         let options;
-        if ([`Дізнатися погоду`].includes(text)) {
+        if ([`Weather now`].includes(text)) {
             options = {
                 chat_id: chatId,
-                text: `Введіть назву населеного пункту, або оберіть зі списку, натиснувши на кнопку`,
+                text: `Write name of city, or press on button to choose a region`,
                 reply_markup: {
-                    keyboard: [[{text: 'Обрати область'}], [{text: 'До головного меню'}]],
+                    keyboard: [[{text: 'Choose region'}], [{text: 'Back to main menu'}]],
                     one_time_keyboard: true,
                     resize_keyboard: true
                 }
             }
             await updateUser(chatId, {stage: 'weatherMain'}, db);
-            await sendMessage(options);
+            console.log(await sendMessage(options));
             return {statusCode: 200};
-        } else if ([`Історія пошуків`].includes(text)) {
+        } else if ([`History of searches`].includes(text)) {
             const requests = await getAllRequests(chatId, db);
             if (requests && requests.length) {
                 const results = [];
@@ -29,12 +29,11 @@ const handleMainMenu = async (settings) => {
                     const parsedElement = JSON.parse(el.dataValues.request_response)
                     results[i] = `${parsedElement.name} - ${parsedElement.main} - ${parsedElement.temp.temp}`
                 });
-                console.log(results);
                 options = {
                     chat_id: chatId,
                     text: results.join('\n'),
                     reply_markup: {
-                        keyboard: [[{text: 'Дізнатися погоду'}],[{text: 'Історія пошуків'}],[{text: 'Карта'},{text: 'Деталі'}]],
+                        keyboard: [[{text: 'Weather now'}],[{text: 'History of searches'}],[{text: 'Map'},{text: 'Details'}]],
                         one_time_keyboard: true,
                         resize_keyboard: true
                     }
@@ -42,60 +41,41 @@ const handleMainMenu = async (settings) => {
             } else {
                 options = {
                     chat_id: chatId,
-                    text: `Історія Ваших пошуків пуста.\nОберіть бажаний пункт меню`,
+                    text: `History of searches is empty.\nChoose what u need:`,
                     reply_markup: {
-                        keyboard: [[{text: 'Дізнатися погоду'}],[{text: 'Історія пошуків'}],[{text: 'Карта'},{text: 'Деталі'}]],
+                        keyboard: [[{text: 'Weather now'}],[{text: 'History of searches'}],[{text: 'Map'},{text: 'Details'}]],
                         one_time_keyboard: true,
                         resize_keyboard: true
                     }
                 }
             }
             await updateUser(chatId, {stage: 'mainMenu'}, db);
-            await sendMessage(options);
+            console.log(await sendMessage(options));
             return {statusCode: 200};
-        } else if ([`Карта`].includes(text)) {
-            // options = {
-            //     chat_id: chatId,
-            //     text: `Тут буде карта`,
-            //     reply_markup: {
-            //         keyboard: [[{text: 'Заглушка'}]],
-            //         one_time_keyboard: true,
-            //         resize_keyboard: true
-            //     }
-            // }
+        } else if ([`Map`].includes(text)) {
+            let reply_markup = JSON.stringify({
+                inline_keyboard: [[{text: "World weather online", url: "https://map.worldweatheronline.com/"}]]
+            });
             options = {
                 chat_id: chatId,
-                text: `Оберіть бажаний пункт меню:`,
+                text: `Press on the url:`,
+                reply_markup: reply_markup
+            }
+            await updateUser(chatId, {stage: 'mainMenu'}, db);
+            console.log(await sendMessage(options));
+            return {statusCode: 200};
+        } else if([`Details`].includes(text)) {
+            options = {
+                chat_id: chatId,
+                text: `This bot was created by @max_skor\nUsed openweather free api\nIn developing used nodejs, aws lambda and serverless framework`,
                 reply_markup: {
-                    keyboard: [[{text: 'Дізнатися погоду'}],[{text: 'Історія пошуків'}],[{text: 'Карта'},{text: 'Деталі'}]],
+                    keyboard: [[{text: 'Weather now'}],[{text: 'History of searches'}],[{text: 'Map'},{text: 'Details'}]],
                     one_time_keyboard: true,
                     resize_keyboard: true
                 }
             }
             await updateUser(chatId, {stage: 'mainMenu'}, db);
-            await sendMessage(options);
-            return {statusCode: 200};
-        } else if([`Детальніше`].includes(text)) {
-            // options = {
-            //     chat_id: chatId,
-            //     text: `Тут будуть деталі`,
-            //     reply_markup: {
-            //         keyboard: [[{text: 'Заглушка'}]],
-            //         one_time_keyboard: true,
-            //         resize_keyboard: true
-            //     }
-            // }
-            options = {
-                chat_id: chatId,
-                text: `Оберіть бажаний пункт меню:`,
-                reply_markup: {
-                    keyboard: [[{text: 'Дізнатися погоду'}],[{text: 'Історія пошуків'}],[{text: 'Карта'},{text: 'Деталі'}]],
-                    one_time_keyboard: true,
-                    resize_keyboard: true
-                }
-            }
-            await updateUser(chatId, {stage: 'mainMenu'}, db);
-            await sendMessage(options);
+            console.log(await sendMessage(options));
             return {statusCode: 200};
         }
         return {statusCode: 200};

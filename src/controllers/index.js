@@ -15,40 +15,37 @@ const { database } = require('../database/models');
 
 const webhook = async (body) => {
     try {
-        // if (!body.message && body.callback_query) await callbackParser(body);
         const { message, callback_query } = body,
                db = database();
         let settings
         if (body.callback_query) {
-            console.log('cb');
             settings = {
                 chatId: callback_query.from.id,
                 text: callback_query.message.text,
                 info: callback_query.from,
                 cb: callback_query.data
             };
+            console.log('cb' + JSON.stringify(settings));
         } else if (body.message) {
             const { text, from, chat, location } = message;
-            console.log('msg')
             settings = {
                 chatId: chat.id,
                 text,
                 info: from,
                 location
             };
+            console.log('msg' + JSON.stringify(settings));
         }
-        console.log(settings);
         let isUserExists = await findUser(settings.info.id, db);
-        console.log(isUserExists);
         if (!isUserExists) {
             const options = {
                 chat_id: settings.chatId,
                 reply_markup: {
-                  keyboard: [[{text: 'Продовжити'}]],
+                  keyboard: [[{text: 'Continue'}]],
                   one_time_keyboard: true,
                   resize_keyboard: true
                 },
-                text: `Привіт! Вітаю тебе в погодному боті, для продовження натисни на кнопку`
+                text: `Hi there! Welcome in Ukraine weather bot! To continue press the button^`
             };
             isUserExists = await createUser(
                 settings.info.id,

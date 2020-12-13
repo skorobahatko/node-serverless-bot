@@ -16,17 +16,29 @@ const handleWeatherCurrent = async (settings) => {
                 await sendMessage(options);
                 options = {
                     chat_id: chatId,
-                    text: `Оберіть бажаний пункт меню:`,
+                    text: `Choose what u need:`,
                     reply_markup: {
-                        keyboard: [[{text: 'Дізнатися погоду'}],[{text: 'Історія пошуків'}],[{text: 'Карта'},{text: 'Деталі'}]],
+                        keyboard: [[{text: 'Weather now'}],[{text: 'History of searches'}],[{text: 'Map'},{text: 'Details'}]],
                         one_time_keyboard: true,
                         resize_keyboard: true
                     }
                 }
-                await sendMessage(options);
+                console.log(await sendMessage(options));
                 await updateUser(chatId, {stage: 'mainMenu'}, db)
                 return {statusCode: 200};
             }
+        } else if ([`No correct city`].includes(text)) {
+            options = {
+                chat_id: chatId,
+                text: `I\'m sorry, u can try write name of city, or press on button to choose a region`,
+                reply_markup: {
+                    keyboard: [[{text: 'Choose region'}], [{text: 'Back to main menu'}]],
+                    one_time_keyboard: true,
+                    resize_keyboard: true
+                }
+            }
+            console.log(await sendMessage(options));
+            await updateUser(chatId, {stage: 'weatherMain'}, db);
         }
         return {statusCode: 200};
     } catch (e) {

@@ -60,7 +60,8 @@ async function getAllRequests (telegramId, db) {
 
 async function sendMessage (options) {
     try {
-        await axios.post(`https://api.telegram.org/bot${chatBotToken}/sendMessage`, options);
+        const result = await axios.post(`https://api.telegram.org/bot${chatBotToken}/sendMessage`, options);
+        return result.data;
     } catch (e) {
         console.log(e);
     }

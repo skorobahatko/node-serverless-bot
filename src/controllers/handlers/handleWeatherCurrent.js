@@ -1,4 +1,4 @@
-const {actionCity, sendMessage, updateUser, endPoint, weatherCodeParser} = require("../../services");
+const {actionCity, sendMessage, updateUser, endPoint, weatherCodeParser, createRequest} = require("../../services");
 const {database} = require('../../database/models');
 
 const handleWeatherCurrent = async (settings) => {
@@ -17,6 +17,7 @@ const handleWeatherCurrent = async (settings) => {
                         chat_id: chatId,
                         text: `${result.name}:\n${result.main}\n${result.temp.temp}`
                     }
+                    await createRequest(chatId, {request_city: result.name, request_response: JSON.stringify(result)}, db);
                 } else {
                     options = {
                         chat_id: chatId,

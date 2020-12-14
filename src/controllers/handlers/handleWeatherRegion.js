@@ -1,14 +1,14 @@
 const { database } = require("../../database/models");
-const { sendMessage, updateUser, actionCity } = require("../../services");
+const { sendMessage, updateUser, actionCity, endPoint, weatherCodeParser } = require("../../services");
 
 const handleWeatherRegion = async (settings) => {
     try {
         const db = database();
         const {cb, chatId, from, text} = settings;
-        let cityesOfRegion = [], options;
+        let cityesOfRegion = [], options, region;
         if (cb && [`Choose region`].includes(text)) {
             cityesOfRegion = await actionCity({type: 'cityes', data: cb});
-            const region = await actionCity({type: 'oneRegion', data: cb});
+            region = await actionCity({type: 'oneRegion', data: cb});
             options = {
                 chat_id: chatId,
                 text: region[0],
@@ -22,9 +22,10 @@ const handleWeatherRegion = async (settings) => {
             let inlineButtons = cityesOfRegion.map(el => {
                 return [{
                     text: el,
-                    callback_data: `${el.slice(0,5)}_cb`
+                    callback_data: `${el}_cb`
                 }]
             })
+            console.log(inlineButtons);
             let reply_markup = JSON.stringify({
                 inline_keyboard: inlineButtons
             });

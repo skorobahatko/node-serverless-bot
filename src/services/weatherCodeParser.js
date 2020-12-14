@@ -1,23 +1,32 @@
-const decoder = (code) => {
+const weatherConditionsParser = (condition) => {
     let result = '';
-    switch (code) {
-        case 200:
-            result = 'Гроза з невеликим дощем';
+    switch (condition) {
+        case 'Thunderstorm':
+            result = '⛈ Thunderstorm';
             break;
-        case 201: 
-            result = 'Гроза з дощем';
+        case 'Drizzle': 
+            result = '🌫 Drizzle';
             break;
-        case 202: 
-            result = 'Гроза з сильним дощем';
+        case 'Rain': 
+            result = '🌧 Rain';
             break;
-        case 210:
-            result = 'Легка гроза';
+        case 'Snow':
+            result = '❄️ Snow';
             break;
-        case 800:
-            result = 'Чисте небо';
+        case 'Clear':
+            result = '☀️ Clear';
+            break;
+        case 'Clouds':
+            result = '☁️ Clouds'
+            break;
+        case 'Mist':
+            result = '🌫 Mist'
+            break;
+        case 'Smoke':
+            result = '🌫 Smoke'
             break;
         default: 
-            result = 'Чисте небо';
+            result = 'secret';
             break;
     }
     return result;
@@ -26,7 +35,8 @@ const decoder = (code) => {
 const weatherCodeParser = async (data) => {
     try {
         let {weather, main: {temp, feels_like}, wind, clouds, name} = data;
-        let description = weather[0].main;
+        let description = weatherConditionsParser(weather[0].main);
+        temp = Math.floor(temp)
         console.log(weather[0].main)
         let result = {
             name,

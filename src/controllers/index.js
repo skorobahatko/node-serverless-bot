@@ -25,7 +25,7 @@ const webhook = async (body) => {
                 info: callback_query.from,
                 cb: callback_query.data
             };
-            console.log('cb' + JSON.stringify(settings));
+            console.log('cb ' + JSON.stringify(settings));
         } else if (body.message) {
             const { text, from, chat, location } = message;
             settings = {
@@ -34,7 +34,7 @@ const webhook = async (body) => {
                 info: from,
                 location
             };
-            console.log('msg' + JSON.stringify(settings));
+            console.log('msg ' + JSON.stringify(settings));
         }
         let isUserExists = await findUser(settings.info.id, db);
         if (!isUserExists) {

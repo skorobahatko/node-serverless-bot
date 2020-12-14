@@ -8,7 +8,7 @@ const handleMainMenu = async (settings) => {
         const db = database();
         const {chatId, from, text} = settings;
         let options;
-        if ([`Weather now`].includes(text)) {
+        if ([`🖼 Weather now`].includes(text)) {
             options = {
                 chat_id: chatId,
                 text: `Write name of city, or press on button to choose a region`,
@@ -21,7 +21,7 @@ const handleMainMenu = async (settings) => {
             await updateUser(chatId, {stage: 'weatherMain'}, db);
             console.log(await sendMessage(options));
             return {statusCode: 200};
-        } else if ([`History of searches`].includes(text)) {
+        } else if ([`📚 History of searches`].includes(text)) {
             const requests = await getAllRequests(chatId, db);
             if (requests && requests.length) {
                 const results = [];
@@ -33,8 +33,7 @@ const handleMainMenu = async (settings) => {
                     chat_id: chatId,
                     text: results.join('\n'),
                     reply_markup: {
-                        keyboard: [[{text: 'Weather now'}],[{text: 'History of searches'}],[{text: 'Map'},{text: 'Details'}]],
-                        one_time_keyboard: true,
+                        keyboard: [[{text: '🖼 Weather now'}],[{text: '📚 History of searches'}],[{text: '🗺 Map'},{text: 'Details'}]],
                         resize_keyboard: true
                     }
                 }
@@ -43,8 +42,7 @@ const handleMainMenu = async (settings) => {
                     chat_id: chatId,
                     text: `History of searches is empty.\nChoose what u need:`,
                     reply_markup: {
-                        keyboard: [[{text: 'Weather now'}],[{text: 'History of searches'}],[{text: 'Map'},{text: 'Details'}]],
-                        one_time_keyboard: true,
+                        keyboard: [[{text: '🖼 Weather now'}],[{text: '📚 History of searches'}],[{text: '🗺 Map'},{text: 'Details'}]],
                         resize_keyboard: true
                     }
                 }
@@ -52,7 +50,7 @@ const handleMainMenu = async (settings) => {
             await updateUser(chatId, {stage: 'mainMenu'}, db);
             console.log(await sendMessage(options));
             return {statusCode: 200};
-        } else if ([`Map`].includes(text)) {
+        } else if ([`🗺 Map`].includes(text)) {
             let reply_markup = JSON.stringify({
                 inline_keyboard: [[{text: "World weather online", url: "https://map.worldweatheronline.com/"}]]
             });
@@ -69,8 +67,7 @@ const handleMainMenu = async (settings) => {
                 chat_id: chatId,
                 text: `This bot was created by @max_skor\nUsed openweather free api\nIn developing used nodejs, aws lambda and serverless framework`,
                 reply_markup: {
-                    keyboard: [[{text: 'Weather now'}],[{text: 'History of searches'}],[{text: 'Map'},{text: 'Details'}]],
-                    one_time_keyboard: true,
+                    keyboard: [[{text: '🖼 Weather now'}],[{text: '📚 History of searches'}],[{text: '🗺 Map'},{text: 'Details'}]],
                     resize_keyboard: true
                 }
             }

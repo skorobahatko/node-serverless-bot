@@ -32,6 +32,7 @@ async function actionCity (settings) {
                     })
                 };
             });
+            console.log(result);
             return result;
         } else if (type === 'oneRegion') {
             json.forEach(element => {
@@ -44,7 +45,7 @@ async function actionCity (settings) {
         } else if (type === 'oneCity') {
             json.forEach(element => {
                 element.areas.forEach(el => {
-                     if (el.name.startsWith(data.slice(0,5))) {
+                     if (el.name.startsWith(data.slice(0,data.length - 3))) {
                         result[0] = el.name;
                     };
                 });

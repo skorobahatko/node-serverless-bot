@@ -35,8 +35,7 @@ const handleWeatherCurrent = async (settings) => {
                     chat_id: chatId,
                     text: `Choose what u need:`,
                     reply_markup: {
-                        keyboard: [[{text: 'Weather now'}],[{text: 'History of searches'}],[{text: 'Map'},{text: 'Details'}]],
-                        one_time_keyboard: true,
+                        keyboard: [[{text: '🖼 Weather now'}],[{text: '📚 History of searches'}],[{text: '🗺 Map'},{text: 'Details'}]],
                         resize_keyboard: true
                     }
                 }

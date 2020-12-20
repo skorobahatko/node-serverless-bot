@@ -37,8 +37,18 @@ const handleWeatherRegion = async (settings) => {
             console.log(await sendMessage(options));
             await updateUser(chatId, {stage: 'weatherCity'}, db);
             return {statusCode: 200};
-        } else {
-            console.log(cb)
+        } else if ([`Back to main menu`].includes(text)) {
+            options = {
+                chat_id: chatId,
+                text: `Choose what u need:`,
+                reply_markup: {
+                    keyboard: [[{text: '🖼 Weather now'}],[{text: '📚 History of searches'}],[{text: '🗺 Map'},{text: 'Details'}]],
+                    resize_keyboard: true
+                }
+            }
+            console.log(await sendMessage(options));
+            await updateUser(chatId, {stage: 'mainMenu'}, db);
+            return {statusCode: 200};        
         }
         return {statusCode: 200};
     } catch (e) {

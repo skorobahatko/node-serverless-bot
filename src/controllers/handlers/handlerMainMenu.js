@@ -1,12 +1,12 @@
 const axios = require('axios');
 const chatBotToken = process.env.TELEGRAM_TOKEN;
-const { sendMessage, updateUser, getAllRequests } = require('../../services');
+const { sendMessage, updateUser, getAllRequests, actionCity } = require('../../services');
 const {database} = require('../../database/models');
 
 const handleMainMenu = async (settings) => {
     try {
         const db = database();
-        const {chatId, from, text} = settings;
+        const {chatId, from, text, cb} = settings;
         let options;
         if ([`🖼 Weather now`].includes(text)) {
             options = {

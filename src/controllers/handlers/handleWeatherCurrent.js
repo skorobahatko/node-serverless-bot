@@ -55,6 +55,18 @@ const handleWeatherCurrent = async (settings) => {
             }
             console.log(await sendMessage(options));
             await updateUser(chatId, {stage: 'weatherMain'}, db);
+        } else if ([`Back to main menu`].includes(text)) {
+            options = {
+                chat_id: chatId,
+                text: `Choose what u need:`,
+                reply_markup: {
+                    keyboard: [[{text: '🖼 Weather now'}],[{text: '📚 History of searches'}],[{text: '🗺 Map'},{text: 'Details'}]],
+                    resize_keyboard: true
+                }
+            }
+            console.log(await sendMessage(options));
+            await updateUser(chatId, {stage: 'mainMenu'}, db);
+            return {statusCode: 200};
         }
         return {statusCode: 200};
     } catch (e) {

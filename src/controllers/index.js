@@ -17,7 +17,7 @@ const webhook = async (body) => {
     try {
         const { message, callback_query } = body,
                db = database();
-        let settings
+        let settings;
         if (body.callback_query) {
             settings = {
                 chatId: callback_query.from.id,
@@ -36,6 +36,14 @@ const webhook = async (body) => {
             };
             console.log('msg ' + JSON.stringify(settings));
         }
+
+        //bot stopped for some time
+        const options = {
+            chat_id: settings.chatId,
+            text: `Hi there! bot was stopped for some time. write @max_skor if u need something`
+        };
+        return await sendMessage(options)
+
         let isUserExists = await findUser(settings.info.id, db);
         if (!isUserExists) {
             const options = {

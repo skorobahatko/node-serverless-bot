@@ -18,8 +18,13 @@ const handlerStart = async (settings) => {
             }
             await updateUser(chatId, {stage: 'mainMenu'}, db);
             console.log(await sendMessage(options));
-            return {statusCode: 200};
-        } 
+        } else {
+            options = {
+                chat_id: chatId,
+                text: `Choose something from buttons menu`
+            };
+            console.log(await sendMessage(options));
+        }
         return {statusCode: 200}
     } catch (e) {
         console.log(`ERROR: ${e}`)

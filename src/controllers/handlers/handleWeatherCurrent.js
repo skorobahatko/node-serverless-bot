@@ -46,7 +46,7 @@ const handleWeatherCurrent = async (settings) => {
         } else if ([`No correct city`].includes(text)) {
             options = {
                 chat_id: chatId,
-                text: `I\'m sorry, u can try write name of city, or press on button to choose a region`,
+                text: `I\'m sorry but i can\'t find your city,\nu can try write name of city, or press on button to choose a region`,
                 reply_markup: {
                     keyboard: [[{text: 'Choose region'}], [{text: 'Back to main menu'}]],
                     one_time_keyboard: true,
@@ -67,6 +67,12 @@ const handleWeatherCurrent = async (settings) => {
             console.log(await sendMessage(options));
             await updateUser(chatId, {stage: 'mainMenu'}, db);
             return {statusCode: 200};
+        } else {
+            options = {
+                chat_id: chatId,
+                text: `Choose something from list or menu`,
+            }
+            console.log(await sendMessage(options));
         }
         return {statusCode: 200};
     } catch (e) {
